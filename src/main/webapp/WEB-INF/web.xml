@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+    version="3.1"
+>
+    <description>app for unit tests</description>
+
+    <!-- filters -->
+    <filter>
+          <filter-name>prometheusFilter</filter-name>
+          <filter-class>io.prometheus.client.filter.MetricsFilter</filter-class>
+          <init-param>
+                <param-name>metric-name</param-name>
+                <param-value>servlet</param-value>
+          </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>atlas_metrics_filter</filter-name>
+        <filter-class>org.apache.catalina.filters.RemoteCIDRFilter</filter-class>
+        <init-param>
+            <param-name>allow</param-name>
+            <param-value>10.0.0.0/8</param-value>
+        </init-param>
+    </filter>
+
+    <!-- filter mappings -->
+    <filter-mapping>
+        <filter-name>prometheusFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>atlas_metrics_filter</filter-name>
+        <url-pattern>/metrics</url-pattern>
+    </filter-mapping>
+
+
+    <!-- servleta -->
+    <servlet>
+        <servlet-name>metrics</servlet-name>
+        <servlet-class>io.prometheus.client.exporter.MetricsServlet</servlet-class>
+    </servlet>
+
+    <!-- sevlet mappings -->
+    <servlet-mapping>
+        <servlet-name>metrics</servlet-name>
+        <url-pattern>/metrics</url-pattern>
+    </servlet-mapping>
+
+</web-app>
+
+<!-- vim: set sw=4 sts=4 et: -->
