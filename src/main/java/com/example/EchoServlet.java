@@ -18,9 +18,11 @@ public class EchoServlet extends HttpServlet {
         HttpServletRequest request,
         HttpServletResponse response
     ) throws ServletException, IOException {
+        long sleep_ms = (long) Math.random() * 1000;
         try {
             PrintWriter writer = response.getWriter();
-            writer.println("echo");
+            Thread.sleep(sleep_ms);
+            writer.println("echo - slept for " + sleep_ms + "ms");
             writer.close();
         } catch(Exception e) {
             System.err.println("Bummer: " + e);
